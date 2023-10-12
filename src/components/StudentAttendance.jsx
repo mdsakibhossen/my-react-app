@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-const StudentAttendence = () => {
+const StudentAttendance = () => {
   const [studentName, setStudentName] = useState("");
   const [allStudents, setAllStudents] = useState([]);
   const [editingMode, setEditingMode] = useState(false);
   const [editAbleStudent, setEditAbleStudent] = useState(null);
-  const [presentStudents, setPresentStudents] = useState([]);
-  const [absentStudents, setAbsentStudents] = useState([]);
+  const presentStudents = allStudents.filter(student=> student.isPresent === true);
+  const absentStudents = allStudents.filter((student) => student.isPresent === false);
 
   const addStudent = (e) => {
     e.preventDefault();
@@ -19,12 +19,13 @@ const StudentAttendence = () => {
     const student = {
       id: String(Date.now()),
       name: studentName,
-      isPresent: "not checked",
+      isPresent: undefined,
     };
 
     setAllStudents([...allStudents, student]);
     setStudentName("");
 
+    // console.log(studentName);
     // console.log(allStudents);
   };
 
@@ -32,16 +33,6 @@ const StudentAttendence = () => {
     const newAllStudents = allStudents.filter((s) => s !== student);
     // console.log(newAllStudents);
     setAllStudents(newAllStudents);
-
-    /* If a student is removed from All Students table it will be also removed from present or absent students table */
-
-    if (student.isPresent) {
-      const newPresentStudents = presentStudents.filter((s) => s !== student);
-      setPresentStudents(newPresentStudents);
-    } else {
-      const newAbsentStudents = absentStudents.filter((s) => s !== student);
-      setAbsentStudents(newAbsentStudents);
-    }
 
   };
 
@@ -72,33 +63,43 @@ const StudentAttendence = () => {
   };
 
   const makePresent = (student) => {
-    if (student.isPresent === "not checked") {
-      student.isPresent = true;
-      setPresentStudents([...presentStudents, student]);
+    if (student.isPresent !== undefined) {
+      return alert("The student is already in a list");
     }
+
+    const newAllStudents = allStudents.map(s=>{
+      if (s === student) {
+        return {...s,isPresent: true}
+      }
+      return s;
+    });
+
+    setAllStudents(newAllStudents);
   };
   const makeAbsent = (student) => {
-    if (student.isPresent === "not checked") {
-      student.isPresent = false;
-      setAbsentStudents([...absentStudents, student]);
+    if (student.isPresent !== undefined) {
+      return alert("The student is already in a list");
     }
+
+    const newAllStudents = allStudents.map((s) => {
+      if (s === student) {
+        return { ...s, isPresent: false };
+      }
+      return s;
+    });
+
+    setAllStudents(newAllStudents);
   };
 
   const moveStudent = (student) => {
-    // console.log(student);
-    if (student.isPresent) {
-      const newPresentStudents = presentStudents.filter((s) => s !== student);
-      // console.log(newPresentStudents);
-      setPresentStudents(newPresentStudents);
-      setAbsentStudents([...absentStudents, student]);
-      student.isPresent = false;
-    } else {
-      const newAbsentStudents = absentStudents.filter((s) => s !== student);
-      // console.log(newAbsentStudents);
-      setAbsentStudents(newAbsentStudents);
-      setPresentStudents([...presentStudents, student]);
-      student.isPresent = true;
-    }
+    const newAllStudents = allStudents.map((s) => {
+      if (s === student) {
+        return { ...s, isPresent: !s.isPresent };
+      }
+      return s;
+    });
+
+    setAllStudents(newAllStudents);
   };
 
   return (
@@ -205,4 +206,4 @@ const StudentAttendence = () => {
   );
 };
 
-export default StudentAttendence;
+export default StudentAttendance;
