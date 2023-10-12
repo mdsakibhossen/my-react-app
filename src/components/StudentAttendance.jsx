@@ -11,11 +11,9 @@ const StudentAttendance = () => {
   const addStudent = (e) => {
     e.preventDefault();
     if (!studentName.trim()) {
-      return alert("Please Enter Student Name");
-    }
-    if (!setStudentName) {
       return alert("Please Enter Student's Name...");
     }
+    
     const student = {
       id: String(Date.now()),
       name: studentName,
