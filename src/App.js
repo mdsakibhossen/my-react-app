@@ -1,9 +1,9 @@
 // import './App.css';
-import StudentAttendance from "./components/StudentAttendance";
+import ToDoApp from "./components/ToDoApp";
 function App() {
   return (
     <div className="App">
-      <StudentAttendance />
+     <ToDoApp />
     </div>
   );
 }
