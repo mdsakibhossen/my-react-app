@@ -1,22 +1,17 @@
+import { useContext } from "react";
+import { ToDoAppContext } from "../contexts/ToDoAppContext";
 
-const NoteList = (props) => {
-    const removeHandler = (note) => {
-      const newNoteList = props.noteList.filter((n) => n !== note);
-      props.setNoteList(newNoteList);
-    };
-
-    const editHandler = (note) => {
-      props.setEditMode(true);
-      props.setNoteText(note.text);
-      props.setEditableNote(note);
-    };
+const NoteList = () => {
+  const toDoAppContext = useContext(ToDoAppContext)
   return (
     <ul id="noteList">
-      {props.noteList.map((note) => (
+      {toDoAppContext.noteList.map((note) => (
         <li key={note.id}>
           <span>{note.text} </span>
-          <button onClick={() => editHandler(note)}>Edit</button>
-          <button onClick={() => removeHandler(note)}>Remove</button>
+          <button onClick={() => toDoAppContext.editHandler(note)}>Edit</button>
+          <button onClick={() => toDoAppContext.removeHandler(note)}>
+            Remove
+          </button>
         </li>
       ))}
     </ul>
