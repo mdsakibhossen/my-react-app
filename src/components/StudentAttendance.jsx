@@ -7,6 +7,8 @@ const StudentAttendance = () => {
   const [allStudents, setAllStudents] = useState([]);
   const [editingMode, setEditingMode] = useState(false);
   const [editAbleStudent, setEditAbleStudent] = useState(null);
+
+  // Derived State
   const presentStudents = allStudents.filter(
     (student) => student.isPresent === true
   );
@@ -14,144 +16,71 @@ const StudentAttendance = () => {
     (student) => student.isPresent === false
   );
 
-  const addStudent = (e) => {
-    e.preventDefault();
-    if (!studentName.trim()) {
-      return alert("Please Enter Student's Name...");
-    }
-
-    const student = {
-      id: String(Date.now()),
-      name: studentName,
-      isPresent: undefined,
-    };
-
-    setAllStudents([...allStudents, student]);
-    setStudentName("");
-
-    // console.log(studentName);
-    // console.log(allStudents);
-  };
-
-  const removeStudent = (student) => {
-    const newAllStudents = allStudents.filter((s) => s !== student);
-    // console.log(newAllStudents);
-    setAllStudents(newAllStudents);
-  };
-
-  const editStudent = (student) => {
-    setEditingMode(true);
-    setStudentName(student.name);
-    setEditAbleStudent(student);
-  };
-  const updateStudent = (e) => {
-    e.preventDefault();
-    if (!studentName.trim()) {
-      return alert("Please Enter Student Name");
-    }
-
-    const newAllStudents = allStudents.map((student) => {
-      if (student === editAbleStudent) {
-        return {
-          ...student,
-          name: studentName,
-        };
-      }
-      return student;
-    });
-
-    setAllStudents(newAllStudents);
-    setEditingMode(false);
-    setStudentName("");
-  };
-
-  const makePresent = (student) => {
-    if (student.isPresent !== undefined) {
-      return alert("The student is already in a list");
-    }
-
-    const newAllStudents = allStudents.map((s) => {
-      if (s === student) {
-        return { ...s, isPresent: true };
-      }
-      return s;
-    });
-
-    setAllStudents(newAllStudents);
-  };
-  const makeAbsent = (student) => {
-    if (student.isPresent !== undefined) {
-      return alert("The student is already in a list");
-    }
-
-    const newAllStudents = allStudents.map((s) => {
-      if (s === student) {
-        return { ...s, isPresent: false };
-      }
-      return s;
-    });
-
-    setAllStudents(newAllStudents);
-  };
-
-  const moveStudent = (student) => {
-    const newAllStudents = allStudents.map((s) => {
-      if (s === student) {
-        return { ...s, isPresent: !s.isPresent };
-      }
-      return s;
-    });
-
-    setAllStudents(newAllStudents);
-  };
-
   return (
     <div className="StudentAttendence" align="center">
       <h1>Student Attendence Management System</h1>
       <br />
+
+      {/* Student Form Start */}
       <div className="student-form">
         <StudentForm
           studentName={studentName}
-          editingMode={editingMode}
-          addStudent={addStudent}
-          updateStudent={updateStudent}
           setStudentName={setStudentName}
+          editingMode={editingMode}
+          setEditingMode={setEditingMode}
+          editAbleStudent={editAbleStudent}
+          allStudents={allStudents}
+          setAllStudents={setAllStudents}
         />
       </div>
+      {/* Student Form End */}
 
       <br />
+
+      {/* Student Details Section Start */}
       <div className="student-details">
+
+        {/* All Students Section Start */}
         <div className="all-students">
           <StudentLists
             caption="All Students"
             Students={allStudents}
-            editStudent={editStudent}
-            removeStudent={removeStudent}
-            makePresent={makePresent}
-            makeAbsent={makeAbsent}
+            setAllStudents={setAllStudents}
+            setEditingMode={setEditingMode}
+            setStudentName={setStudentName}
+            setEditAbleStudent={setEditAbleStudent}
             allStudentsTable={true}
           />
         </div>
+        {/* All Students Section End */}
 
         <br />
 
+        {/* Present Students Section Start */}
         <div className="present-students">
           <StudentLists
             caption="Present Students"
             Students={presentStudents}
-            moveStudent={moveStudent}
+            allStudents={allStudents}
+            setAllStudents={setAllStudents}
           />
         </div>
+        {/* Present Students Section End */}
+
         <br />
 
+        {/* Absent Students Section Start */}
         <div className="absent-students">
           <StudentLists
             caption="Absent Students"
             Students={absentStudents}
-            moveStudent={moveStudent}
+            allStudents={allStudents}
+            setAllStudents={setAllStudents}
           />
         </div>
+        {/* Absent Students Section End */}
       </div>
+      {/* Student Details Section End */}
     </div>
   );
 };

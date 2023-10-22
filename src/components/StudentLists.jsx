@@ -1,6 +1,63 @@
-import React from 'react'
+import React from "react";
 
 const StudentLists = (props) => {
+
+  // Remove Student
+  const removeStudent = (student) => {
+    const newAllStudents = props.Students.filter((s) => s !== student);
+    props.setAllStudents(newAllStudents);
+  };
+
+  // Edit Student
+  const editStudent = (student) => {
+    props.setEditingMode(true);
+    props.setStudentName(student.name);
+    props.setEditAbleStudent(student);
+  };
+
+  // Make Present
+  const makePresent = (student) => {
+    if (student.isPresent !== undefined) {
+      return alert("The student is already in a list");
+    }
+
+    const newAllStudents = props.Students.map((s) => {
+      if (s === student) {
+        return { ...s, isPresent: true };
+      }
+      return s;
+    });
+
+    props.setAllStudents(newAllStudents);
+  };
+
+  // Make Absent
+  const makeAbsent = (student) => {
+    if (student.isPresent !== undefined) {
+      return alert("The student is already in a list");
+    }
+
+    const newAllStudents = props.Students.map((s) => {
+      if (s === student) {
+        return { ...s, isPresent: false };
+      }
+      return s;
+    });
+
+    props.setAllStudents(newAllStudents);
+  };
+
+  // Move Student
+  const moveStudent = (student) => {
+    const newAllStudents = props.allStudents.map((s) => {
+      if (s === student) {
+        return { ...s, isPresent: !s.isPresent };
+      }
+      return s;
+    });
+
+    props.setAllStudents(newAllStudents);
+  };
 
   return (
     <table border={1}>
@@ -20,22 +77,18 @@ const StudentLists = (props) => {
             {props.allStudentsTable ? (
               <React.Fragment>
                 <td>
-                  <button onClick={() => props.editStudent(student)}>
-                    Edit
-                  </button>
+                  <button onClick={() => editStudent(student)}>Edit</button>
                 </td>
                 <td>
-                  <button onClick={() => props.removeStudent(student)}>
-                    Remove
-                  </button>
+                  <button onClick={() => removeStudent(student)}>Remove</button>
                 </td>
                 <td>
-                  <button onClick={() => props.makePresent(student)}>
+                  <button onClick={() => makePresent(student)}>
                     Make Present
                   </button>
                 </td>
                 <td>
-                  <button onClick={() => props.makeAbsent(student)}>
+                  <button onClick={() => makeAbsent(student)}>
                     Make Absent
                   </button>
                 </td>
@@ -43,7 +96,7 @@ const StudentLists = (props) => {
             ) : (
               <React.Fragment>
                 <td>
-                  <button onClick={() => props.moveStudent(student)}>
+                  <button onClick={() => moveStudent(student)}>
                     Accidentally Added
                   </button>
                 </td>
@@ -54,6 +107,6 @@ const StudentLists = (props) => {
       </tbody>
     </table>
   );
-}
+};
 
-export default StudentLists
+export default StudentLists;
